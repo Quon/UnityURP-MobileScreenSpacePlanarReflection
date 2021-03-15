@@ -1,0 +1,10 @@
+{
+  "name": "com.quonlu.sspr",
+  "description": "MobileScreenSpacePlanarReflection",
+  "version": "0.1.0",
+  "unity": "2020.2",
+  "displayName": "MobileSSPR",
+  "dependencies": {
+    "com.unity.render-pipelines.universal": "10.2.2"
+  }
+}

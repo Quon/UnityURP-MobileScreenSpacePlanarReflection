@@ -1,2 +1,1 @@
-# UnityURP-ScreenSpacePlanarReflection
- ScreenSpacePlanarReflection using RendererFeature
+# MobileSSPR
