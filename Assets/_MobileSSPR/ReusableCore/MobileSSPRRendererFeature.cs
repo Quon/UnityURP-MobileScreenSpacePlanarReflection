@@ -173,6 +173,12 @@ public class MobileSSPRRendererFeature : ScriptableRendererFeature
                 Matrix4x4 VP = GL.GetGPUProjectionMatrix(camera.projectionMatrix, true) * camera.worldToCameraMatrix;
                 cb.SetComputeMatrixParam(cs, "_VPMatrix", VP);
 
+                Matrix4x4 projMatrix = GL.GetGPUProjectionMatrix(camera.projectionMatrix, false);
+                Matrix4x4 viewMatrix = camera.worldToCameraMatrix;
+                Matrix4x4 viewProjMatrix = projMatrix * viewMatrix;
+                Matrix4x4 invViewProjMatrix = Matrix4x4.Inverse(viewProjMatrix);
+                cb.SetComputeMatrixParam(cs, "_InverseVPMatrix", invViewProjMatrix);
+
                 if (ShouldUseSinglePassUnsafeAllowFlickeringDirectResolve())
                 {
                     ////////////////////////////////////////////////
@@ -240,9 +246,9 @@ public class MobileSSPRRendererFeature : ScriptableRendererFeature
 
             //======================================================================
             //draw objects(e.g. reflective wet ground plane) with lightmode "MobileSSPR", which will sample _MobileSSPR_ColorRT
-            DrawingSettings drawingSettings = CreateDrawingSettings(lightMode_SSPR_sti, ref renderingData, SortingCriteria.CommonOpaque);
-            FilteringSettings filteringSettings = new FilteringSettings(RenderQueueRange.all);
-            context.DrawRenderers(renderingData.cullResults, ref drawingSettings, ref filteringSettings);
+            //DrawingSettings drawingSettings = CreateDrawingSettings(lightMode_SSPR_sti, ref renderingData, SortingCriteria.CommonOpaque);
+            //FilteringSettings filteringSettings = new FilteringSettings(RenderQueueRange.all);
+            //context.DrawRenderers(renderingData.cullResults, ref drawingSettings, ref filteringSettings);
         }
 
         /// Cleanup any allocated resources that were created during the execution of this render pass.
@@ -266,7 +272,7 @@ public class MobileSSPRRendererFeature : ScriptableRendererFeature
         m_ScriptablePass = new CustomRenderPass(Settings);
 
         // Configures where the render pass should be injected.
-        m_ScriptablePass.renderPassEvent = RenderPassEvent.AfterRenderingTransparents;//we must wait _CameraOpaqueTexture & _CameraDepthTexture is usable
+        m_ScriptablePass.renderPassEvent = RenderPassEvent.BeforeRenderingTransparents;//we must wait _CameraOpaqueTexture & _CameraDepthTexture is usable
     }
 
     // Here you can inject one or multiple render passes in the renderer.

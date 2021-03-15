@@ -19,12 +19,20 @@ Shader "MobileSSPR/ExampleShader"
 
     SubShader
     {
+        Tags
+        {
+            "RenderPipeline" = "UniversalPipeline"
+            "RenderType" = "Transparent"
+            "UniversalMaterialType" = "Lit"
+            "Queue" = "Transparent"
+        }
         Pass
         {
-            //================================================================================================
-            //if "LightMode"="MobileSSPR", this shader will only draw if MobileSSPRRendererFeature is on
-            Tags { "LightMode"="MobileSSPR" }
-            //================================================================================================
+            Name "Universal Forward"
+            Tags
+            {
+                "LightMode" = "UniversalForward"
+            }
 
             HLSLPROGRAM
             #pragma vertex vert
